@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import random
+
 import model.mazzo
 import model.mano
 
@@ -59,5 +61,11 @@ class Giocatore:
         print("non so prendere... finisce tutto a terra")
         terra.append(carta)
 
+class AI(Giocatore):
+    def gioca(self, terra):
+        carta = random.choice(self.mano)
+        self.prendi(carta, terra)
+
+
 def main():
-    Partita(Giocatore(), Giocatore(), Giocatore(), Giocatore())
+    Partita(AI(), AI(), AI(), AI())

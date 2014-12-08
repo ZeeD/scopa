@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import random
+import collections
 
 from . import carta
 
@@ -32,7 +33,33 @@ class Mazzetto(list):
         return len(c for c in self if c.seme == carta.Seme.denari)
 
     def _settanta(self):
-        return 0
+        '''
+                        7   6   Asso    5   4   3   2   Re  Cavallo Fante
+        Valore Primiera 21  18  16      15  14  13  12  10  10      10
+        '''
+        per_seme = collections.defaultdict(list)
+        for c in self:
+            per_seme[c.seme].append(c)
+
+        # se non ho almeno una carta per ogni seme la settanta non vale
+        if len(per_seme) < len(c.Seme):
+            return 0
+
+        def punti(c):
+            return {
+                carta.Valore.asso: 16,
+                carta.Valore.due: 12,
+                carta.Valore.tre: 13,
+                carta.Valore.quattro: 14,
+                carta.Valore.cinque: 15,
+                carta.Valore.sei: 18,
+                carta.Valore.sette: 21,
+                carta.Valore.donna: 10,
+                carta.Valore.cavallo: 10,
+                carta.Valore.re: 10
+            }[c.valore]
+
+        return sum(map(punti, cs) for cs in per_seme.values)
 
     def _settebello(self):
         for c in self:
