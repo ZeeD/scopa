@@ -30,7 +30,7 @@ class Mazzetto(list):
         return allunga + denara + settanta + settebello + self.scope
 
     def _denare(self):
-        return len(c for c in self if c.seme == carta.Seme.denari)
+        return len([c for c in self if c.seme == carta.Seme.denari])
 
     def _settanta(self):
         '''
@@ -42,7 +42,7 @@ class Mazzetto(list):
             per_seme[c.seme].append(c)
 
         # se non ho almeno una carta per ogni seme la settanta non vale
-        if len(per_seme) < len(c.Seme):
+        if len(per_seme) < len(carta.Seme):
             return 0
 
         def punti(c):

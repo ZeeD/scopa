@@ -40,7 +40,8 @@ class Partita:
     def punti(self):
         for giocatore in self.giocatori:
             altri_giocatori = set(self.giocatori) - set([giocatore])
-            print(giocatore.mazzetto.punti(altri_giocatori))
+            altre_mani = [ g.mazzetto for g in altri_giocatori ]
+            print(giocatore.mazzetto.punti(*altre_mani))
 
 class Giocatore:
     def gioca(self, terra):
