@@ -8,6 +8,7 @@ import model.mazzo
 import model.mano
 import view
 
+
 class Partita:
     def __init__(self, *giocatori):
         self.giocatori = giocatori
@@ -20,8 +21,8 @@ class Partita:
     def gioca(self, prima_volta=False):
         # distribuzione carte - la prima volta con le carte a terra
         for i, giocatore in enumerate(self.giocatori):
-            giocatore.mazzetto = model.mazzo.Mazzetto() # vuoto
-            if i != len(self.giocatori) - 1:            # al cartaro va dopo aver messo le carte a terra
+            # al cartaro va dopo aver messo le carte a terra
+            if i != len(self.giocatori) - 1:
                 giocatore.mano = model.mano.Mano(*self.mazzo.carte(3))
         if prima_volta:
             self.terra = self.mazzo.carte(4)
@@ -42,10 +43,14 @@ class Partita:
     def punti(self):
         for giocatore in self.giocatori:
             altri_giocatori = set(self.giocatori) - set([giocatore])
-            altre_mani = [ g.mazzetto for g in altri_giocatori ]
+            altre_mani = [g.mazzetto for g in altri_giocatori]
             print(giocatore.mazzetto.punti(*altre_mani))
 
+
 class Giocatore:
+    def __init__(self):
+        self.mazzetto = model.mazzo.Mazzetto()
+
     def gioca(self, terra):
         if len(self.mano) == 1:
             i = 0
@@ -61,7 +66,7 @@ class Giocatore:
 
     def prendi(self, c, terra):
         # se c'è almeno una carta con il valore di quella che hai giocato, prendila
-        stesso_valore = [ t for t in terra if t.valore == c.valore ]
+        stesso_valore = [t for t in terra if t.valore == c.valore]
 
         # preferisci i denari
         if len(stesso_valore) >= 1:
@@ -74,7 +79,7 @@ class Giocatore:
             return
 
         # prova tutte le combinazioni di carte < c, vedi se ce n'è qualcuna la cui somma è c
-        carte_basse = [ t for t in terra if t.valore < c.valore ]
+        carte_basse = [t for t in terra if t.valore < c.valore]
 
         # preferisci combinazioni lunghe
         for r in range(len(carte_basse), 1, -1):
@@ -104,6 +109,7 @@ class Giocatore:
     def __str__(self):
         return 'TU'
 
+
 class AI(Giocatore):
     def __init__(self, i):
         super().__init__()
@@ -115,6 +121,7 @@ class AI(Giocatore):
 
     def __str__(self):
         return 'Ai-' + self.i
+
 
 def main():
     Partita(Giocatore(), AI('2'), AI('3'), AI('4'))

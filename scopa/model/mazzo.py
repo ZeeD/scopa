@@ -5,6 +5,7 @@ import collections
 
 from . import carta
 
+
 class Mazzo(list):
     def __init__(self):
         for seme in carta.Seme:
@@ -15,15 +16,27 @@ class Mazzo(list):
         random.shuffle(self)
 
     def carte(self, n=3):
-        return [ self.pop() for _ in range(n) ]
+        return [self.pop() for _ in range(n)]
+
 
 class Mazzetto(list):
-    def punti(self, *altre_mani):
-        allunga = len(self) >= max(map(len, altre_mani))
-        denara = self._denare() >= max(mano._denare() for mano in altre_mani)
-        settanta = self._settanta() >= max(mano._settanta() for mano in altre_mani)
+    def punti(self, *mazzetti):
+        allunga = len(self) >= max(map(len, mazzetti))
+        denara = self._denare() >= max(m._denare() for m in mazzetti)
+        settanta = self._settanta() >= max(m._settanta() for m in mazzetti)
         settebello = self._settebello()
         scope = self._scope()
+
+        if allunga:
+            print("-->allunga!")
+        if denara:
+            print("-->denara!")
+        if settanta:
+            print("-->settanta!")
+        if settebello:
+            print("-->settebello!")
+        for _ in range(scope):
+            print("-->scopa!")
 
         return allunga + denara + settanta + settebello + scope
 
@@ -57,7 +70,7 @@ class Mazzetto(list):
                 carta.Valore.re: 10
             }[c.valore]
 
-        return sum(map(punti, cs) for cs in per_seme.values())
+        return sum(max(map(punti, cs)) for cs in per_seme.values())
 
     def _settebello(self):
         for c in self:
@@ -66,4 +79,4 @@ class Mazzetto(list):
         return False
 
     def _scope(self):
-        return len([ c for c in self if c.retro ])
+        return len([c for c in self if c.retro])

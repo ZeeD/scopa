@@ -2,6 +2,7 @@
 
 import tkinter
 
+
 class Application(tkinter.Frame):
     def __init__(self):
         tkinter.Frame.__init__(self)
@@ -17,9 +18,11 @@ class Application(tkinter.Frame):
     def say_hi(self):
         print("hi there, everyone!")
 
+
 def mainloop():
     tkinter.Tk()
     Application().mainloop()
+
 
 def pprint(fmt, *elements):
     acc = []
@@ -29,4 +32,3 @@ def pprint(fmt, *elements):
         else:
             acc.append(element)
     print(fmt % tuple(acc))
-

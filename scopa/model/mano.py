@@ -2,7 +2,7 @@
 
 from . import carta
 
-class Mano(list):   # TODO implementare un OrderedSet
-    ''''''
+
+class Mano(list):
     def __init__(self, *carte):
         self.extend(carte)

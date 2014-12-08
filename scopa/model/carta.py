@@ -2,6 +2,7 @@
 
 import enum
 
+
 class Carta:
     def __init__(self, *, seme, valore, retro=False):
         self.seme = seme
