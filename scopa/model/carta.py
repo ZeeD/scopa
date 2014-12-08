@@ -21,7 +21,7 @@ class Valore(enum.Enum):
     asso = 1
     due = 2
     tre = 3
-    quattro = 3
+    quattro = 4
     cinque = 5
     sei = 6
     sette = 7
