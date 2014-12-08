@@ -9,7 +9,8 @@ class Carta:
         self.retro = retro
 
     def __str__(self):
-        return '%s(%s, %s%s)' % (self.__class__.__name__, self.seme, self.valore, ', voltata' if self.retro else '')
+        return '"%s di %s"' % (self.valore, self.seme)
+
 
 class Seme(enum.Enum):
     denari = 1
@@ -17,7 +18,11 @@ class Seme(enum.Enum):
     bastoni = 3
     spade = 4
 
-class Valore(enum.Enum):
+    def __str__(self):
+        return self.name
+
+
+class Valore(enum.IntEnum):
     asso = 1
     due = 2
     tre = 3
@@ -28,3 +33,6 @@ class Valore(enum.Enum):
     donna = 8
     cavallo = 9
     re = 10
+
+    def __str__(self):
+        return self.name

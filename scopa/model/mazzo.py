@@ -18,16 +18,14 @@ class Mazzo(list):
         return [ self.pop() for _ in range(n) ]
 
 class Mazzetto(list):
-    def __init__(self):
-        self.scope = 0
-
     def punti(self, *altre_mani):
         allunga = len(self) >= max(map(len, altre_mani))
         denara = self._denare() >= max(mano._denare() for mano in altre_mani)
         settanta = self._settanta() >= max(mano._settanta() for mano in altre_mani)
         settebello = self._settebello()
+        scope = self._scope()
 
-        return allunga + denara + settanta + settebello + self.scope
+        return allunga + denara + settanta + settebello + scope
 
     def _denare(self):
         return len([c for c in self if c.seme == carta.Seme.denari])
@@ -59,10 +57,13 @@ class Mazzetto(list):
                 carta.Valore.re: 10
             }[c.valore]
 
-        return sum(map(punti, cs) for cs in per_seme.values)
+        return sum(map(punti, cs) for cs in per_seme.values())
 
     def _settebello(self):
         for c in self:
-            if c.seme == Seme.denari and c.valore == Valore.sette:
+            if c.seme == carta.Seme.denari and c.valore == carta.Valore.sette:
                 return True
         return False
+
+    def _scope(self):
+        return len([ c for c in self if c.retro ])

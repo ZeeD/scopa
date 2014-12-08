@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 import random
+import itertools
 
+import model.carta
 import model.mazzo
 import model.mano
-
 import view
 
 class Partita:
@@ -24,6 +25,7 @@ class Partita:
                 giocatore.mano = model.mano.Mano(*self.mazzo.carte(3))
         if prima_volta:
             self.terra = self.mazzo.carte(4)
+            view.pprint("terra: %s", self.terra)
         self.giocatori[-1].mano = model.mano.Mano(*self.mazzo.carte(3))
 
         # i 3 turni delle 3 carte in mano
@@ -48,25 +50,71 @@ class Giocatore:
         if len(self.mano) == 1:
             i = 0
         else:
-            print('[giocatore: %s] carte in mano: %s' % (self, ', '.join(map(str, self.mano))))
-            print('carte a terra: ' + ', '.join(map(str, terra)))
+            view.pprint('[giocatore: %s] carte in mano: %s, carte a terra: %s', self, self.mano, terra)
             s = input('scegli una carta: ')
             while s not in map(str, range(1, len(self.mano)+1)):
                 print('inserisci un numero tra 1 e %s' % (len(self.mano)+1))
                 s = input('scegli una carta: ')
             i = int(s) - 1
-        carta = self.mano.pop(i)
-        self.prendi(carta, terra)
+        c = self.mano.pop(i)
+        self.prendi(c, terra)
 
-    def prendi(self, carta, terra):
-        print("non so prendere... finisce tutto a terra")
-        terra.append(carta)
+    def prendi(self, c, terra):
+        # se c'è almeno una carta con il valore di quella che hai giocato, prendila
+        stesso_valore = [ t for t in terra if t.valore == c.valore ]
+
+        # preferisci i denari
+        if len(stesso_valore) >= 1:
+            def preferisci_denari(c):
+                if c.seme == model.carta.Seme.denari:
+                    return 2
+                else:
+                    return 1
+            self._prendi(c, sorted(stesso_valore, key=preferisci_denari)[:1], terra)
+            return
+
+        # prova tutte le combinazioni di carte < c, vedi se ce n'è qualcuna la cui somma è c
+        carte_basse = [ t for t in terra if t.valore < c.valore ]
+
+        # preferisci combinazioni lunghe
+        for r in range(len(carte_basse), 1, -1):
+            for comb in itertools.combinations(carte_basse, r):
+                if sum(t.valore for t in comb) == c.valore:
+                    # found!
+                    self._prendi(c, comb, terra)
+                    return
+
+        view.pprint("[giocatore: %s] non so prendere... aggiungo %s a %s", self, c, terra)
+        terra.append(c)
+
+    def _prendi(self, c, comb, terra):
+        view.pprint("[giocatore: %s] prendo %s da %s con un %s!", self, comb, terra, c)
+        # tolgo le carte da terra
+        for t in comb:
+            terra.remove(t)
+
+        # le metto sul mio mazzetto, con la carta che ho usato
+        self.mazzetto.extend(comb)
+        self.mazzetto.append(c)
+
+        # scopa!
+        if not terra:
+            c.retro = True
+
+    def __str__(self):
+        return 'TU'
 
 class AI(Giocatore):
-    def gioca(self, terra):
-        carta = random.choice(self.mano)
-        self.prendi(carta, terra)
+    def __init__(self, i):
+        super().__init__()
+        self.i = i
 
+    def gioca(self, terra):
+        c = random.choice(self.mano)
+        self.prendi(c, terra)
+
+    def __str__(self):
+        return 'Ai-' + self.i
 
 def main():
-    Partita(AI(), AI(), AI(), AI())
+    Partita(Giocatore(), AI('2'), AI('3'), AI('4'))

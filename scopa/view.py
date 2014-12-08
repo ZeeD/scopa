@@ -20,3 +20,13 @@ class Application(tkinter.Frame):
 def mainloop():
     tkinter.Tk()
     Application().mainloop()
+
+def pprint(fmt, *elements):
+    acc = []
+    for element in elements:
+        if isinstance(element, list) or isinstance(element, tuple):
+            acc.append(', '.join(map(str, element)))
+        else:
+            acc.append(element)
+    print(fmt % tuple(acc))
+
