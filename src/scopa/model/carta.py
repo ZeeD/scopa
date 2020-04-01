@@ -1,17 +1,4 @@
-#!/usr/bin/env python3
-
 import enum
-
-
-class Carta:
-    def __init__(self, *, seme, valore, retro=False):
-        self.seme = seme
-        self.valore = valore
-        self.retro = retro
-
-    def __str__(self):
-        return '"%s di %s"' % (self.valore, self.seme)
-
 
 class Seme(enum.Enum):
     denari = 1
@@ -19,7 +6,7 @@ class Seme(enum.Enum):
     bastoni = 3
     spade = 4
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -35,5 +22,15 @@ class Valore(enum.IntEnum):
     cavallo = 9
     re = 10
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
+
+
+class Carta:
+    def __init__(self, *, seme: Seme, valore: Valore, retro: bool=False) -> None:
+        self.seme = seme
+        self.valore = valore
+        self.retro = retro
+
+    def __str__(self) -> str:
+        return '"%s di %s"' % (self.valore, self.seme)

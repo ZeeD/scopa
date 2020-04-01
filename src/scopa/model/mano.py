@@ -1,6 +1,8 @@
-#!/usr/bin/env python3
+import typing
 
+from . import carta
 
-class Mano(list):
-    def __init__(self, *carte):
+class Mano(typing.List[carta.Carta]):
+    def __init__(self, *carte: carta.Carta) -> None:
+        super().__init__()
         self.extend(carte)
