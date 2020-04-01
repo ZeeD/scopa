@@ -15,8 +15,8 @@ setuptools.setup(name='scopa',
                          'data/*'
                      ],
                  },
-                 entry_points={  # Optional
+                 entry_points={
                      'console_scripts': [
-                         'bin/scopa',
+                         'scopa=scopa.main:main',
                      ],
                  })

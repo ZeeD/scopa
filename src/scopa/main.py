@@ -3,10 +3,8 @@
 import random
 import itertools
 
-import model.carta
-import model.mazzo
-import model.mano
-import view
+from . import model
+from . import view
 
 
 class Partita:
