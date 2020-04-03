@@ -21,7 +21,7 @@ class Giocatore:
         if len(self.mano) == 1:
             i = 0
         else:
-            view.pprint('[giocatore: %s] carte in mano: %s, carte a terra: %s', self, self.mano, terra)
+            view.pprint('[giocatore: %s] dai_carte in mano: %s, dai_carte a terra: %s', self, self.mano, terra)
             s = input('scegli una carta: ')
             while s not in map(str, range(1, len(self.mano)+1)):
                 print('inserisci un numero tra 1 e %s' % (len(self.mano)+1))
@@ -46,7 +46,7 @@ class Giocatore:
             self._prendi(c, sorted(stesso_valore, key=preferisci_denari)[:1], terra)
             return
 
-        # prova tutte le combinazioni di carte < c, vedi se ce n'è qualcuna la cui somma è c
+        # prova tutte le combinazioni di dai_carte < c, vedi se ce n'è qualcuna la cui somma è c
         carte_basse = [t for t in terra if t.valore < c.valore]
 
         # preferisci combinazioni lunghe
@@ -65,7 +65,7 @@ class Giocatore:
                 comb: typing.Sequence[carta.Carta],
                 terra: typing.List[carta.Carta]) -> None:
         view.pprint("[giocatore: %s] prendo %s da %s con un %s!", self, comb, terra, c)
-        # tolgo le carte da terra
+        # tolgo le dai_carte da terra
         for t in comb:
             terra.remove(t)
 
@@ -91,23 +91,23 @@ class Partita:
         self.gioca(prima_volta=True)
 
     def gioca(self, prima_volta: bool=False) -> None:
-        # distribuzione carte - la prima volta con le carte a terra
+        # distribuzione dai_carte - la prima volta con le dai_carte a terra
         for i, giocatore in enumerate(self.giocatori):
-            # al cartaro va dopo aver messo le carte a terra
+            # al cartaro va dopo aver messo le dai_carte a terra
             if i != len(self.giocatori) - 1:
-                giocatore.mano = self.mazzo.carte(3)
+                giocatore.mano = self.mazzo.dai_carte(3)
         if prima_volta:
-            self.terra = self.mazzo.carte(4)
+            self.terra = self.mazzo.dai_carte(4)
             view.pprint("terra: %s", self.terra)
-        self.giocatori[-1].mano = self.mazzo.carte(3)
+        self.giocatori[-1].mano = self.mazzo.dai_carte(3)
 
-        # i 3 turni delle 3 carte in mano
+        # i 3 turni delle 3 dai_carte in mano
         for _ in range(3):
             for giocatore in self.giocatori:
                 giocatore.gioca(terra=self.terra)   # modifica terra in-place
 
         # se è finito il mazzo, vai a calcolare i punti, altrimenti altro giro
-        if self.mazzo:
+        if self.mazzo.ancora_carte():
             self.gioca()
         else:
             self.punti()

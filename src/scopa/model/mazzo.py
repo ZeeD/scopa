@@ -7,19 +7,20 @@ import typing
 from . import carta
 
 
-class Mazzo(typing.List[carta.Carta]):
+class Mazzo:
     def __init__(self) -> None:
-        super().__init__()
-        for seme in carta.Seme:
-            for valore in carta.Valore:
-                self.append(carta.Carta(seme=seme, valore=valore))
+        self._carte = [carta.Carta(seme=seme, valore=valore)
+                      for seme in carta.Seme
+                      for valore in carta.Valore]
 
     def mischia(self) -> None:
-        random.shuffle(self)
+        random.shuffle(self._carte)
 
-    def carte(self, n: int=3) -> typing.List[carta.Carta]:
-        return [self.pop() for _ in range(n)]
+    def dai_carte(self, n: int=3) -> typing.List[carta.Carta]:
+        return [self._carte.pop() for _ in range(n)]
 
+    def ancora_carte(self) -> bool:
+        return bool(self._carte)
 
 class Mazzetto(typing.List[carta.Carta]):
     def punti(self, *mazzetti: Mazzetto) -> int:
