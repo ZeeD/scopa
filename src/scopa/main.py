@@ -5,7 +5,6 @@ import random
 import typing
 
 from .model import carta
-from .model import mano
 from .model import mazzo
 from . import view
 
@@ -13,7 +12,7 @@ from . import view
 class Giocatore:
     def __init__(self) -> None:
         self.mazzetto = mazzo.Mazzetto()
-        self.mano: typing.Optional[mano.Mano] = None
+        self.mano: typing.Optional[typing.List[carta.Carta]] = None
 
     def gioca(self, terra: typing.List[carta.Carta]) -> None:
         if self.mano is None:
@@ -96,11 +95,11 @@ class Partita:
         for i, giocatore in enumerate(self.giocatori):
             # al cartaro va dopo aver messo le carte a terra
             if i != len(self.giocatori) - 1:
-                giocatore.mano = mano.Mano(*self.mazzo.carte(3))
+                giocatore.mano = self.mazzo.carte(3)
         if prima_volta:
             self.terra = self.mazzo.carte(4)
             view.pprint("terra: %s", self.terra)
-        self.giocatori[-1].mano = mano.Mano(*self.mazzo.carte(3))
+        self.giocatori[-1].mano = self.mazzo.carte(3)
 
         # i 3 turni delle 3 carte in mano
         for _ in range(3):
