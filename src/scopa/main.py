@@ -21,7 +21,7 @@ class Giocatore:
         if len(self.mano) == 1:
             i = 0
         else:
-            view.pprint('[giocatore: %s] dai_carte in mano: %s, dai_carte a terra: %s', self, self.mano, terra)
+            view.pprint('[giocatore: %s] carte in mano: %s, dai_carte a terra: %s', self, self.mano, terra)
             s = input('scegli una carta: ')
             while s not in map(str, range(1, len(self.mano)+1)):
                 print('inserisci un numero tra 1 e %s' % (len(self.mano)+1))

@@ -1,6 +1,11 @@
+'a simple card'
+
+import dataclasses
 import enum
 
+
 class Seme(enum.Enum):
+    'the cards suits'
     denari = 1
     coppe = 2
     bastoni = 3
@@ -11,6 +16,7 @@ class Seme(enum.Enum):
 
 
 class Valore(enum.IntEnum):
+    'the cards values'
     asso = 1
     due = 2
     tre = 3
@@ -26,11 +32,13 @@ class Valore(enum.IntEnum):
         return self.name
 
 
+@dataclasses.dataclass
 class Carta:
-    def __init__(self, *, seme: Seme, valore: Valore, retro: bool=False) -> None:
-        self.seme = seme
-        self.valore = valore
-        self.retro = retro
+    'a simple model for a card'
+
+    seme: Seme
+    valore: Valore
+    retro: bool = False
 
     def __str__(self) -> str:
         return '"%s di %s"' % (self.valore, self.seme)
