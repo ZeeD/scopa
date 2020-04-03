@@ -70,8 +70,7 @@ class Giocatore:
             terra.remove(t)
 
         # le metto sul mio mazzetto, con la carta che ho usato
-        self.mazzetto.extend(comb)
-        self.mazzetto.append(c)
+        self.mazzetto.aggiungi(comb, c)
 
         # scopa!
         if not terra:
